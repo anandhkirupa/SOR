@@ -1,7 +1,6 @@
 using UnityEngine;
 using TMPro;
 using Oculus.Voice.Dictation;
-using Meta.WitAi.TTS.Utilities;  // for TTSSpeaker
 using System.Diagnostics;
 using System.IO;
 
@@ -10,7 +9,7 @@ public class DictationUI : MonoBehaviour
     [Header("References")]
     public AppDictationExperience dictationExperience;
     public TMP_Text transcriptText;
-    public TTSSpeaker ttsSpeaker;   // drag in Inspector
+    public RunJets jetsSpeaker;
 
     // timers
     private Stopwatch sttTimer = new Stopwatch();
@@ -52,9 +51,6 @@ public class DictationUI : MonoBehaviour
         dictationExperience.DictationEvents.OnFullTranscription.AddListener(OnFull);
         dictationExperience.DictationEvents.OnError.AddListener(OnError);
 
-        // hook tts events
-        ttsSpeaker.Events.OnStartSpeaking.AddListener(OnTTSStarted);
-
         // prepare log file
         logFilePath = Path.Combine(Application.persistentDataPath, "LatencyLog.txt");
         File.AppendAllText(logFilePath, "\n=== Session Started " + System.DateTime.Now + " ===\n");
@@ -94,24 +90,12 @@ public class DictationUI : MonoBehaviour
         {
             ttsTimer.Restart();
             roundTripTimer.Restart();
-            ttsSpeaker.Speak(transcript);
+            jetsSpeaker.SpeakPhonemes(transcript);
         }
         else
         {
             transcriptText.text = "No transcript yet!";
         }
-    }
-
-    private void OnTTSStarted(TTSSpeaker speaker, string spokenText)
-    {
-        ttsTimer.Stop();
-        roundTripTimer.Stop();
-
-        string logLine = $"TTS={ttsTimer.ElapsedMilliseconds}ms, " +
-                        $"Manual RoundTrip={roundTripTimer.ElapsedMilliseconds}ms";
-
-        transcriptText.text += $"\n{logLine}";
-        File.AppendAllText(logFilePath, System.DateTime.Now + ": " + logLine + "\n");
     }
 
     public void SaveTranscriptAsJson()
@@ -147,5 +131,15 @@ public class DictationUI : MonoBehaviour
             return data.response?.text;
         }
         return null;
+    }
+    public void OnJetsTTSStarted(string spokenText)
+    {
+        ttsTimer.Stop();
+        roundTripTimer.Stop();
+
+        string logLine = $"TTS={ttsTimer.ElapsedMilliseconds}ms, Manual RoundTrip={roundTripTimer.ElapsedMilliseconds}ms";
+
+        transcriptText.text += $"\n{logLine}";
+        File.AppendAllText(logFilePath, System.DateTime.Now + ": " + logLine + "\n");
     }
 }
