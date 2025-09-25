@@ -1,0 +1,51 @@
+{
+  "lesson_id": "lesson-123",
+  "teacher_id": "teacher-456",
+  "response": {
+    "text": "/k/ /a/ /t/ /b/ /p/",
+    "confidence": 0.92
+  },
+  "emotion": {
+    "eye": {
+      "left": "focused",
+      "right": "focused",
+      "blink": false
+    },
+    "eyebrow": {
+      "left": "neutral",
+      "right": "neutral"
+    },
+    "mouth": {
+      "shape": "neutral",
+      "openness": 0.5
+    },
+    "head": {
+      "tilt": 0,
+      "nod": 0,
+      "shake": 0
+    },
+    "intensity": 0.7
+  },
+  "action": {
+    "hand": {
+      "left": "idle",
+      "right": "raise"
+    },
+    "arm": {
+      "left": 0,
+      "right": 45
+    },
+    "torso": {
+      "lean": 10,
+      "twist": 0
+    },
+    "legs": {
+      "left": "neutral",
+      "right": "neutral"
+    },
+    "head": {
+      "tilt": 5,
+      "turn": 0
+    }
+  }
+}
